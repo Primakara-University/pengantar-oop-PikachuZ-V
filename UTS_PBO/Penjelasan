@@ -1,0 +1,62 @@
+1. Soal 1 – Class dan Object
+
+Bagian ini adalah fondasi. Kita membuat **cetakan (Class)** bernama `Course`. Cetakan ini mendefinisikan bahwa setiap "mata kuliah" yang kita buat nanti harus memiliki tiga slot data: nama mata kuliah, jumlah kredit (SKS), dan nama pengajar.
+
+Kita juga mendefinisikan sebuah **konstruktor**, yaitu sebuah "instruksi perakitan" khusus. Instruksi ini memaksa kita bahwa setiap kali kita membuat objek `Course` baru, kita *harus* langsung menyediakan ketiga data tersebut.
+
+Terakhir, kita memberi cetakan ini sebuah **kemampuan (Method)** bernama `displayInfo`. Kemampuan ini, jika dipanggil, akan mencetak semua data yang tersimpan di dalam objek tersebut (nama, kredit, dan pengajar) ke layar. Di file `MainApp`, kita menggunakan cetakan ini untuk membuat dua **objek (wujud nyata)**: satu untuk `oop` dan satu untuk `web`.
+
+
+2. Soal 2 – Encapsulation
+
+Di soal ini, kita memodifikasi `Class Course` dari soal 1. Tujuannya adalah untuk **melindungi datanya**.
+
+Caranya, kita "mengunci" ketiga atribut datanya (nama, kredit, pengajar) menggunakan `private`. Ini berarti tidak ada yang bisa mengubah data itu secara sembarangan dari luar.
+
+Sebagai gantinya, kita menyediakan "pintu" khusus. Untuk data `credit`, kita membuatkan "pintu" berupa **Method Setter** (`setCredit`). Pintu ini dijaga oleh sebuah **validasi** (perintah `if`). Jika ada yang mencoba memasukkan nilai kredit negatif, penjaga (`if`) akan menolaknya dan mencetak pesan error. Datanya pun aman dan tidak akan pernah bernilai negatif.
+
+Kita juga membuatkan "jendela" baca-saja (`public getter`) agar pihak luar bisa *melihat* datanya, tapi tidak bisa *mengubahnya*.
+
+3. Soal 3 – Relationship antar Class (Aggregation)
+
+Di sini kita membuat **Class** baru bernama `Student`. Class ini memiliki datanya sendiri (nama dan NIM).
+
+Yang terpenting, `Student` juga memiliki sebuah atribut berupa **daftar kosong (ArrayList)** yang dirancang khusus untuk menampung **objek-objek `Course`**. Ini adalah hubungan "memiliki" (Aggregation): satu `Student` *memiliki* sebuah daftar mata kuliah.
+
+Kita membuatkan kemampuan `addCourse` pada `Student`. Method ini tidak menciptakan `Course` baru, melainkan hanya mengambil objek `Course` yang *sudah ada* (seperti `oop` atau `web` dari Soal 1) dan memasukkannya ke dalam daftar pribadinya.
+
+Method `displayStudentInfo` kemudian akan mencetak info `Student`, lalu memanggil method `displayInfo` dari setiap `Course` yang ada di dalam daftarnya.
+
+ 4. Soal 4 – Inheritance dan Polymorphism
+
+Inheritance (Pewarisan):
+Kita membuat sebuah `Class` "induk" (superclass) yang sangat umum bernama `Person`. Induk ini hanya punya `name` dan kemampuan dasar `introduce`.
+
+Lalu kita membuat dua `Class` "anak" (subclass), yaitu `StudentPerson` dan `Lecturer`. Keduanya kita setel agar *mewarisi* (extends) dari `Person`. Artinya, kedua anak ini **otomatis mendapatkan** atribut `name` dan kemampuan `introduce` dari induknya tanpa perlu ditulis ulang.
+
+Kedua anak ini kemudian **mengganti (override)** kemampuan `introduce` warisan tersebut dengan versi mereka sendiri yang lebih spesifik (satu menyebut NIM, satu lagi menyebut NIDN).
+
+Polymorphism (Banyak Bentuk):
+Di `MainApp`, kita mendemonstrasikan keajaibannya. Kita membuat sebuah **array** yang tipenya adalah `Person`. Namun, kita mengisinya dengan objek `StudentPerson` dan `Lecturer`.
+
+Ini legal karena "anak" juga *adalah* "induk" (`StudentPerson` *is-a* `Person`). Saat kita melakukan *looping* pada array tersebut dan memanggil kemampuan `introduce` dari setiap item, Java secara otomatis tahu harus menjalankan versi `introduce` milik siapa—apakah versi `StudentPerson` atau versi `Lecturer`.
+
+
+5. Soal 5 – Abstract Class & Interface
+
+Di sini kita membuat dua jenis "kontrak" atau "template":
+
+1. Abstract Class (`Assessment`):
+Kita membuat ini sebagai "template formulir" bernama `Assessment` (penilaian). Kita tandai sebagai `abstract`, artinya *Anda tidak bisa membuat objek* dari template ini. Ini adalah induk yang tidak lengkap.
+
+Template ini mewajibkan (dengan `abstract method`) bahwa "anak" manapun yang menggunakannya *harus* menyediakan implementasi untuk method `calculateFinalScore`. `Assessment` juga menyediakan atribut `subject` yang bisa langsung dipakai oleh semua anaknya.
+
+2. Interface (Gradable):
+Kita juga membuat "kontrak kemampuan" bernama `Gradable` (bisa dinilai). Ini adalah kontrak murni; isinya hanya satu janji: "Siapapun yang meng-implementasi saya, *wajib* punya method `getGrade`."
+
+Implementasi (Exam & Assignment):
+Terakhir, kita membuat dua class nyata: `Exam` (ujian) dan `Assignment` (tugas). Keduanya kita paksa untuk:
+Mewarisi (extends) template Assessment.
+Meng-implementasi (implements) kontrak Gradable.
+
+Hasilnya, `Exam` dan `Assignment` dipaksa oleh Java untuk menulis kode untuk dua method: `calculateFinalScore` (warisan dari `Assessment`) dan `getGrade` (kontrak dari `Gradable`).
